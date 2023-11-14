@@ -1,13 +1,10 @@
 package com.zhunismp.project1.services;
 
 import com.zhunismp.project1.entity.Product;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface ProductService {
-    void saveProduct(Product product);
-    void deleteProductById(int id);
-    void updateProduct(Product product);
-    Product findProductById(int id);
-    List<Product> findAllProduct();
+public interface ProductService extends CrudRepository<Product,Integer> {
+    Product findById(int id);
 }

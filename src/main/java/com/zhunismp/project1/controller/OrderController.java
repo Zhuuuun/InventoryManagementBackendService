@@ -1,6 +1,7 @@
 package com.zhunismp.project1.controller;
 
 import com.zhunismp.project1.entity.Order;
+import com.zhunismp.project1.exception.OrderNotFoundException;
 import com.zhunismp.project1.response.ResponseHandler;
 import com.zhunismp.project1.services.OrderService;
 import jakarta.validation.Valid;
@@ -27,7 +28,7 @@ public class OrderController {
         return ResponseHandler.responseBuilder(
                 "Request successfully : from " + new Object(){}.getClass().getEnclosingMethod().getName() + "()",
                 HttpStatus.OK,
-                orderService.findAllOrder()
+                orderService.findAll()
         );
     }
 
@@ -51,16 +52,20 @@ public class OrderController {
 
     @GetMapping("/order/{orderId}")
     public ResponseEntity<Object> getOrderById(@PathVariable @Valid int orderId) {
+        Order buff = orderService.findById(orderId);
+        if(buff == null) throw new OrderNotFoundException("Order doesn't exists with id : " + orderId);
+
         return ResponseHandler.responseBuilder(
                 "Request successfully : from " + new Object(){}.getClass().getEnclosingMethod().getName() + "()",
                 HttpStatus.OK,
-                orderService.findOrderById(orderId)
+                buff
         );
     }
 
     @PostMapping("order/add")
     public ResponseEntity<Object> updateOrder(@RequestBody @Valid Order order) {
-        orderService.saveOrder(order);
+        if(orderService.findById(order.getId()) == null) throw new OrderNotFoundException("Order doesn't exists with id : " + order.getId());
+        orderService.save(order);
 
         return ResponseHandler.responseBuilder(
                 "Request successfully : from " + new Object(){}.getClass().getEnclosingMethod().getName() + "()",
@@ -71,7 +76,8 @@ public class OrderController {
 
     @DeleteMapping("order/delete/{orderId}")
     public ResponseEntity<Object> deleteOrderById(@PathVariable int orderId) {
-        orderService.deleteOrderById(orderId);
+        if(orderService.findById(orderId) == null) throw new OrderNotFoundException("Order doesn't exists with id : " + orderId);
+        orderService.deleteById(orderId);
 
         return ResponseHandler.responseBuilder(
                 "Request successfully : from " + new Object(){}.getClass().getEnclosingMethod().getName() + "()",
@@ -80,14 +86,15 @@ public class OrderController {
         );
     }
 
-    @PutMapping("order/complete/{orderId}")
-    public ResponseEntity<Object> completeOrder(@PathVariable int orderId) {
-        orderService.completeOrder(orderId);
-
-        return ResponseHandler.responseBuilder(
-                "Request successfully : from " + new Object(){}.getClass().getEnclosingMethod().getName() + "()",
-                HttpStatus.OK,
-                null
-        );
-    }
+//    @PutMapping("order/complete/{orderId}")
+//    public ResponseEntity<Object> completeOrder(@PathVariable int orderId) {
+//        if(orderService.findById(orderId) == null) throw new OrderNotFoundException("Order doesn't exists with id : " + orderId);
+//        orderService.completeOrder(orderId);
+//
+//        return ResponseHandler.responseBuilder(
+//                "Request successfully : from " + new Object(){}.getClass().getEnclosingMethod().getName() + "()",
+//                HttpStatus.OK,
+//                null
+//        );
+//    }
 }
