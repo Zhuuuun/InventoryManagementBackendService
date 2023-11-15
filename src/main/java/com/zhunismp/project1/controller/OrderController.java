@@ -86,15 +86,15 @@ public class OrderController {
         );
     }
 
-//    @PutMapping("order/complete/{orderId}")
-//    public ResponseEntity<Object> completeOrder(@PathVariable int orderId) {
-//        if(orderService.findById(orderId) == null) throw new OrderNotFoundException("Order doesn't exists with id : " + orderId);
-//        orderService.completeOrder(orderId);
-//
-//        return ResponseHandler.responseBuilder(
-//                "Request successfully : from " + new Object(){}.getClass().getEnclosingMethod().getName() + "()",
-//                HttpStatus.OK,
-//                null
-//        );
-//    }
+    @PutMapping("order/complete/{orderId}")
+    public ResponseEntity<Object> completeOrder(@PathVariable int orderId) {
+        if(orderService.findById(orderId) == null) throw new OrderNotFoundException("Order doesn't exists with id : " + orderId);
+        orderService.completeOrder(orderId);
+
+        return ResponseHandler.responseBuilder(
+                "Request successfully : from " + new Object(){}.getClass().getEnclosingMethod().getName() + "()",
+                HttpStatus.OK,
+                null
+        );
+    }
 }
