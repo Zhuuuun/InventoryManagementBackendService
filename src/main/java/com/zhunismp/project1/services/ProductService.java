@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface ProductService extends CrudRepository<Product,Integer> {
+public interface ProductService extends CrudRepository<Product,Integer>,ProductServiceCustom {
     Product findById(int id);
 }

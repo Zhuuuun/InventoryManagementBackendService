@@ -9,14 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface OrderService extends CrudRepository<Order,Integer> {
+public interface OrderService extends CrudRepository<Order,Integer> , OrderServiceCustom{
     Order findById(int id);
     @Query(value = "from Order where status = 0")
     List<Order> findAllCompleteOrders();
     @Query(value = "from Order where status = 1")
     List<Order> findAllUnCompleteOrders();
-    @Modifying
-    @Transactional
-    @Query(value = "update Order o set o.status = 0 where o.id = :id")
-    void completeOrder(@Param("id") int id);
 }

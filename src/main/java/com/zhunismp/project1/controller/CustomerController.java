@@ -15,12 +15,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class CustomerController {
-    private final CustomerService customerService;
-
     @Autowired
-    public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
-    }
+    private CustomerService customerService;
 
     @GetMapping("/customers")
     public ResponseEntity<Object> getAllCustomers() {
@@ -34,8 +30,8 @@ public class CustomerController {
     @GetMapping("/customer/{customerId}")
     public ResponseEntity<Object> getCustomerById(@PathVariable int customerId) {
         // get current method name : https://stackoverflow.com/questions/442747/getting-the-name-of-the-currently-executing-method
+        if(!customerService.existsById(customerId)) throw new CustomerNotFoundException("Customer Doesn't exists with id : " + customerId);
         Customer customer = customerService.findById(customerId);
-        if(customer == null)  throw new CustomerNotFoundException("Customer Doesn't exists with id : " + customerId);
 
         return ResponseHandler.responseBuilder(
                     "Request successfully : from " + new Object(){}.getClass().getEnclosingMethod().getName() + "()",
@@ -58,7 +54,7 @@ public class CustomerController {
 
     @DeleteMapping("customer/delete/{customerId}")
     public ResponseEntity<Object> deleteCustomer(@PathVariable int customerId) {
-        if(customerService.findById(customerId) == null)  throw new CustomerNotFoundException("Customer Doesn't exists with id : " + customerId);
+        if(!customerService.existsById(customerId))  throw new CustomerNotFoundException("Customer Doesn't exists with id : " + customerId);
         customerService.deleteById(customerId);
 
         return ResponseHandler.responseBuilder(
@@ -70,7 +66,7 @@ public class CustomerController {
 
     @PutMapping("customer/update")
     public ResponseEntity<Object> updateCustomer(@RequestBody @Valid Customer customer) {
-        if (customerService.findById(customer.getId()) == null) throw new CustomerNotFoundException("Customer Doesn't exists with id : " + customer.getId());
+        if (!customerService.existsById(customer.getId())) throw new CustomerNotFoundException("Customer Doesn't exists with id : " + customer.getId());
         Customer buff = customerService.save(customer);
 
         return ResponseHandler.responseBuilder(

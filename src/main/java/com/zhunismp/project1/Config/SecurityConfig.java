@@ -1,4 +1,4 @@
-package com.zhunismp.project1.security;
+package com.zhunismp.project1.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,11 +33,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(configure ->
                         configure
-                                .requestMatchers("/").hasRole("EMPLOYEE")
-//                                .requestMatchers("/orders").hasRole("EMPLOYEE")
-//                                .requestMatchers("/products").hasRole("EMPLOYEE")
-                                .requestMatchers("/orders/add/**").hasRole("MANAGER")
-                                .requestMatchers("/products/add/**").hasRole("MANAGER")
+                                .requestMatchers("/","/orders","/products").hasRole("EMPLOYEE")
+                                .requestMatchers("/orders/add/**","/products/add/**").hasRole("MANAGER")
                                 .anyRequest() // every user need to authenticate
                                 .authenticated()
         );

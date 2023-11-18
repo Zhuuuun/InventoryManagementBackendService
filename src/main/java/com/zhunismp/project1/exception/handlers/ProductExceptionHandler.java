@@ -1,5 +1,7 @@
-package com.zhunismp.project1.exception;
+package com.zhunismp.project1.exception.handlers;
 
+import com.zhunismp.project1.exception.ProductNotEnoughException;
+import com.zhunismp.project1.exception.ProductNotFoundException;
 import com.zhunismp.project1.response.ExceptionResponseHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,5 +19,16 @@ public class ProductExceptionHandler {
         );
 
         return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {ProductNotEnoughException.class})
+    public ResponseEntity<Object> handleProductNotEnoughException(ProductNotEnoughException productNotEnoughExceptionException) {
+        // create payload
+        ExceptionResponseHandler exceptionResponse = new ExceptionResponseHandler(
+                productNotEnoughExceptionException.getMessage(),
+                HttpStatus.BAD_REQUEST
+        );
+
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.BAD_REQUEST);
     }
 }

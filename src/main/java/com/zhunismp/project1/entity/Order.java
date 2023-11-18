@@ -35,8 +35,6 @@ public class Order {
     private String destination;
     @Column(name = "order_date")
     @NotNull(message = "orderDate is mandatory")
-//    @Pattern(regexp = "(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2})",
-//            message = "orderDatetime must be formatted in \"yyyy-MM-dd HH:mm:ss\"")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime orderDateTime;
 
